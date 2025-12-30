@@ -145,29 +145,12 @@
                     </div>
                 </div>
                 <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-200 overflow-hidden flex flex-col w-full">
-                    <!-- 듀얼 모드 탭 -->
+                    <!-- 카테고리 탭 -->
                     <div class="bg-slate-50 p-4 border-b">
-                        <div class="flex gap-3 mb-4">
-                            <button onclick="app.switchMode('meeting')" id="mode-meeting" class="mode-tab flex-1 px-6 py-4 rounded-2xl text-sm font-black transition-all border-2 bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
-                                <div class="text-left">
-                                    <div class="text-xs font-bold opacity-80 mb-1">01.</div>
-                                    <div>DIGITAL MEETING SHEET</div>
-                                    <div class="text-[10px] font-normal opacity-70 mt-0.5">(1차 상담용)</div>
-                                </div>
-                            </button>
-                            <button onclick="app.switchMode('search')" id="mode-search" class="mode-tab flex-1 px-6 py-4 rounded-2xl text-sm font-black transition-all border-2 bg-blue-600 text-white border-blue-600 shadow-lg">
-                                <div class="text-left">
-                                    <div class="text-xs font-bold opacity-80 mb-1">02.</div>
-                                    <div>ITEM MASTER DATABASE</div>
-                                    <div class="text-[10px] font-normal opacity-70 mt-0.5">(세부 항목)</div>
-                                </div>
-                            </button>
-                        </div>
-                        <!-- 검색 모드: 카테고리 탭 -->
                         <div id="search-mode-tabs" class="flex flex-wrap gap-2 overflow-x-auto pb-1"></div>
                     </div>
                     
-                    <!-- 검색 모드 컨텐츠 -->
+                    <!-- 아이템 마스터 데이터베이스 컨텐츠 -->
                     <div id="search-mode-content">
                         <div class="p-6 bg-white border-b flex flex-col md:flex-row justify-between items-center gap-4">
                             <h2 class="font-black text-slate-800 text-sm flex items-center uppercase tracking-widest shrink-0 text-nowrap">
@@ -194,28 +177,6 @@
                                 </thead>
                                 <tbody id="db-tbody" class="divide-y divide-slate-100"></tbody>
                             </table>
-                        </div>
-                    </div>
-                    
-                    <!-- 미팅지 모드 컨텐츠 -->
-                    <div id="meeting-mode-content" class="hidden">
-                        <div class="h-[500px] overflow-y-auto custom-scroll p-6">
-                            <div id="meeting-form" class="space-y-5"></div>
-                        </div>
-                        <!-- 추정 시공물량 카드 -->
-                        <div id="estimate-quantity-card" class="bg-slate-900 rounded-2xl p-6 text-white shadow-xl border border-slate-700 mx-6 mb-6">
-                            <h3 class="text-sm font-black mb-4 uppercase tracking-widest text-slate-300">추정 시공물량 (NET ESTIMATE)</h3>
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-center pb-3 border-b border-slate-700">
-                                    <span class="text-xs font-bold text-slate-400">바닥(마루) 추정</span>
-                                    <span id="floor-estimate" class="text-2xl font-black">0.0평</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-xs font-bold text-slate-400">도배(벽지) 추정</span>
-                                    <span id="wall-estimate" class="text-2xl font-black">0.0평</span>
-                                </div>
-                            </div>
-                            <p class="text-[9px] text-slate-500 mt-4 italic">* 현장 실측 시 오차가 발생할 수 있습니다.</p>
                         </div>
                     </div>
                 </div>
@@ -726,47 +687,15 @@
 
         // ==================== 모드 전환 ====================
         app.switchMode = function(mode) {
-            app.currentMode = mode;
+            // 테스트 페이지에서는 항상 search 모드만 사용
+            app.currentMode = 'search';
             
-            // 탭 스타일 업데이트
-            const searchTab = document.getElementById('mode-search');
-            const meetingTab = document.getElementById('mode-meeting');
-            
-            if (mode === 'search') {
-                if (searchTab) {
-                    searchTab.className = 'mode-tab flex-1 px-6 py-4 rounded-2xl text-sm font-black transition-all border-2 bg-blue-600 text-white border-blue-600 shadow-lg';
-                }
-                if (meetingTab) {
-                    meetingTab.className = 'mode-tab flex-1 px-6 py-4 rounded-2xl text-sm font-black transition-all border-2 bg-white text-slate-600 border-slate-200 hover:bg-slate-50';
-                }
-            } else {
-                if (meetingTab) {
-                    meetingTab.className = 'mode-tab flex-1 px-6 py-4 rounded-2xl text-sm font-black transition-all border-2 bg-blue-600 text-white border-blue-600 shadow-lg';
-                }
-                if (searchTab) {
-                    searchTab.className = 'mode-tab flex-1 px-6 py-4 rounded-2xl text-sm font-black transition-all border-2 bg-white text-slate-600 border-slate-200 hover:bg-slate-50';
-                }
-            }
-            
-            // 컨텐츠 표시/숨김
+            // 검색 모드 컨텐츠 항상 표시
             const searchContent = document.getElementById('search-mode-content');
-            const meetingContent = document.getElementById('meeting-mode-content');
             const searchTabs = document.getElementById('search-mode-tabs');
             
-            const quantityCard = document.getElementById('estimate-quantity-card');
-            
-            if (mode === 'search') {
-                searchContent.classList.remove('hidden');
-                meetingContent.classList.add('hidden');
-                if (searchTabs) searchTabs.style.display = 'flex';
-                if (quantityCard) quantityCard.classList.add('hidden');
-            } else {
-                searchContent.classList.add('hidden');
-                meetingContent.classList.remove('hidden');
-                if (searchTabs) searchTabs.style.display = 'none';
-                app.renderMeetingForm();
-                app.updateEstimateQuantities();
-            }
+            if (searchContent) searchContent.classList.remove('hidden');
+            if (searchTabs) searchTabs.style.display = 'flex';
         };
 
         // ==================== 미팅지 렌더링 ====================

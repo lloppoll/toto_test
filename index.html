@@ -2331,10 +2331,10 @@
             });
         };
 
-       // ==================== 테스트 기간 제한 (오늘부터 내일 오후 6시까지) ====================
+        // ==================== 테스트 기간 제한 (오늘부터 내일 오후 6시까지) ====================
         app.checkTestPeriod = function() {
             const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
             
             // 내일 오후 6시까지의 종료 시각 계산
             const tomorrow = new Date();
@@ -2391,7 +2391,7 @@
             }
             app.init();
         };
-        
+
         // ==================== 자동 저장 (선택사항) ====================
         setInterval(() => {
             if (app.selectedItems.length > 0) {

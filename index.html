@@ -61,6 +61,7 @@
                     <div id="sync-status" class="hidden text-[10px] bg-green-500/20 text-green-400 px-3 py-1 rounded-full border border-green-500/30 font-bold shrink-0">● CLOUD CONNECTED</div>
                     <button onclick="app.saveToLocal()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-lg shrink-0">저장</button>
                     <button onclick="app.loadFromLocal()" class="bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-lg shrink-0">불러오기</button>
+                    <button onclick="app.clearAll()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-lg shrink-0">전체 지우기</button>
                     <div class="text-right hidden md:block shrink-0">
                         <div class="text-[10px] font-bold text-slate-500 uppercase">Estimated Total</div>
                         <div id="nav-total" class="text-xl lg:text-2xl font-black text-white">0원</div>
@@ -2295,6 +2296,121 @@
             } catch (e) {
                 app.showNotification('불러오기 실패: ' + e.message, 'error');
             }
+        };
+
+        app.clearAll = function() {
+            if (app.selectedItems.length === 0) {
+                app.showNotification('지울 항목이 없습니다.', 'info');
+                return;
+            }
+
+            if (!confirm('모든 선택된 항목과 입력 데이터를 지우시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) {
+                return;
+            }
+
+            // 선택된 항목 초기화
+            app.selectedItems = [];
+
+            // 입력 필드 초기화
+            document.getElementById('site-name').value = '';
+            document.getElementById('site-size').value = '';
+            document.getElementById('rate-exp').value = '5';
+            document.getElementById('rate-profit').value = '10';
+            document.getElementById('val-adjust').value = '0';
+            document.getElementById('area-multiplier').value = '1.0';
+
+            // 면적 타입 초기화
+            app.setAreaType('normal');
+
+            // 미팅지 데이터 초기화
+            app.meetingData = {
+                customerName: '',
+                contact: '',
+                siteName: '',
+                constructionDate: '',
+                budget: '',
+                familyCount: '',
+                notes: '',
+                scope: '전체공사',
+                demolition: '',
+                window: '',
+                extension: { living: false, kitchen: false, room: false },
+                aircon: { system: false, stand: false, location: '' },
+                bathroom: {
+                    common: {
+                        enabled: false,
+                        bathtub: '',
+                        partition: '',
+                        sliding: '',
+                        mirror: '',
+                        tile: '',
+                        faucet: ''
+                    },
+                    couple: {
+                        enabled: false,
+                        bathtub: '',
+                        partition: '',
+                        sliding: '',
+                        mirror: '',
+                        tile: '',
+                        faucet: ''
+                    }
+                },
+                floor: { type: '', current: '' },
+                wall: { type: '', spec: '' },
+                kitchen: {
+                    induction: false,
+                    gas: false,
+                    coffee: false,
+                    fridge: '',
+                    kimchi: '',
+                    water: '',
+                    hood: '',
+                    sink: '',
+                    dishwasher: false
+                },
+                furniture: { outdoor: false, aircon: false, location: '' },
+                carpentry: {
+                    ceiling: false,
+                    ceilingLocation: '',
+                    furniture: false,
+                    door: '',
+                    door9mm: false,
+                    doorInso9mm: false,
+                    doorBu: false,
+                    hidden: false
+                },
+                electric: {
+                    embedded: false,
+                    embeddedLocation: '',
+                    main: false,
+                    mainLocation: '',
+                    indirect: false,
+                    indirectLocation: '',
+                    line: false,
+                    lineLocation: '',
+                    aircon: false,
+                    induction: false,
+                    water: false,
+                    purifier: false,
+                    panel: false,
+                    internet: false,
+                    internetLocation: ''
+                },
+                door: { type: '' }
+            };
+
+            // 미팅지 폼 다시 렌더링
+            if (app.currentMode === 'meeting') {
+                app.renderMeetingForm();
+            }
+
+            // 모든 업데이트
+            app.updateAll();
+            app.updateActualSizeDisplay();
+            app.updateEstimateQuantities();
+
+            app.showNotification('모든 데이터가 초기화되었습니다.', 'success');
         };
 
         // ==================== 빠른 작업 ====================

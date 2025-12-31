@@ -493,19 +493,19 @@
                     "W_PREM_LABOR2": () => Math.ceil((adjustedSize * 2.5) / 14),  // 벽만
                     "W_PREM_LABOR3": () => Math.ceil((adjustedSize * 1.2) / 14),  // 천장만
                     
-                    // 타일 인건비
+                     // 타일 인건비
                     "T_LABOR": () => Math.ceil(adjustedSize / 3),
                     "T_LABOR1": () => Math.ceil(adjustedSize / 5),  // 화장실
                     "T_LABOR2": () => Math.ceil(adjustedSize / 13),  // 벽만
                     "T_LABOR3": () => Math.ceil(adjustedSize / 14),  // 천장만
                     
                     // 평수 기반
-                    "PY_1X": () => adjustedSize,
-                    "PY_10": () => Math.ceil(adjustedSize / 10),
-                    "PY_K32": () => parseFloat((adjustedSize / 32).toFixed(2)),
+                     "PY_1X": () => Math.ceil(adjustedSize),
+                     "PY_10": () => Math.ceil(adjustedSize / 10),
+                     "PY_K32": () => Math.ceil(adjustedSize / 32),
                     
                     // 바닥면적
-                    "FLOOR_07": () => Math.ceil(adjustedSize * 0.7),
+                     "FLOOR_07": () => Math.ceil(adjustedSize * 0.7),
                     "FLOOR_08": () => Math.ceil(adjustedSize * 0.8),
                     "FLOOR_11": () => Math.ceil((adjustedSize * 0.7) * 1.1)
                 };
@@ -528,28 +528,28 @@
                 const adjustedSize = sizeNum * areaMultiplier;
 
                 // FIXED 로직 처리
-                if (logic.endsWith("_FIXED")) {
+                 if (logic.endsWith("_FIXED")) {
                     // 특수 계수 로직들
                     if (logic.includes("PY_07_FIXED") || logic.includes("FLOOR_07")) {
-                        return Math.round(basePrice * adjustedSize * 0.7);
+                        return Math.ceil(basePrice * adjustedSize * 0.7);
                     }
                     if (logic.includes("PY_08_FIXED") || logic.includes("FLOOR_08")) {
-                        return Math.round(basePrice * adjustedSize * 0.8);
+                        return Math.ceil(basePrice * adjustedSize * 0.8);
                     }
                     if (logic.includes("PY_11_FIXED") || logic.includes("FLOOR_11")) {
-                        return Math.round(basePrice * adjustedSize * 1.1);
+                        return Math.ceil(basePrice * adjustedSize * 1.1);
                     }
                     if (logic.includes("WALL_25") || logic.includes("PY_WL_WALL25")) {
-                        return Math.round(basePrice * adjustedSize * 2.5);
+                        return Math.ceil(basePrice * adjustedSize * 2.5);
                     }
                     if (logic.includes("WALL_35") || logic.includes("PY_WL_WALL35")) {
-                        return Math.round(basePrice * adjustedSize * 3.5);
+                        return Math.ceil(basePrice * adjustedSize * 3.5);
                     }
                     if (logic.includes("PY_MOLD") || logic.includes("PY_FN") || logic.includes("PY_K")) {
-                        return Math.round(basePrice * adjustedSize * 1.0);
+                        return Math.ceil(basePrice * adjustedSize * 1.0);
                     }
                     // 기본 FIXED: 평수 × 단가
-                    return Math.round(basePrice * adjustedSize);
+                    return Math.ceil(basePrice * adjustedSize);
                 }
                 
                 return basePrice;
